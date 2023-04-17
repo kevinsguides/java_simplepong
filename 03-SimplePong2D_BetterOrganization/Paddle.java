@@ -3,7 +3,7 @@ import java.awt.*; //needed for Color
 public class Paddle {
 
     //declare instance variables
-    private int height, x, y, speed, oscillationDirection;
+    private int height, x, y, speed, oscillateTowards;
     private Color color;
 
     //Width of paddle will always be 15 for this app, you may change if you want
@@ -23,7 +23,7 @@ public class Paddle {
         this.height = height;
         this.speed = speed;
         this.color = color;
-        this.oscillationDirection = speed;
+        this.oscillateTowards = 0;
     }
 
     /**
@@ -114,13 +114,13 @@ public class Paddle {
             // if the pc paddle is within 10 pixels of the detected collision point,
             // oscillate up and down
             if (getCenterY() > (detectedCollideY + top)) {
-                oscillationDirection = 0;
+                oscillateTowards = 0;
             } else if (getCenterY() < (detectedCollideY - bottom)) {
-                oscillationDirection = 10000;
+                oscillateTowards = 10000;
             }
             // move the pc paddle up or down by calling moveTowards and the
             // oscillationDirection based on the paddles current y position
-            moveTowards(oscillationDirection);
+            moveTowards(oscillateTowards);
     }
 
     
