@@ -17,7 +17,7 @@ public class PongGame extends JPanel implements MouseMotionListener {
 
     private int detectedCollideY; //the location we think the ball will collide with the PC's paddle
     private boolean pcGotToTarget; //whether or not the PC has reached the target paddle location
-    private int oscillationDirection; //the direction and amount the PC paddle is oscillating up/down
+    private int oscillateTowards; //the direction and amount the PC paddle is oscillating up/down
     private boolean pcAccidentalMiss; //whether or not the PC "accidentally" misses the next ball
     /**
      * Standard constructor for a PongGame
@@ -39,7 +39,7 @@ public class PongGame extends JPanel implements MouseMotionListener {
         //set detectedCollideY to -1
         detectedCollideY = -1;
         pcGotToTarget = false;
-        oscillationDirection = 5;
+        oscillateTowards = 0;
         pcAccidentalMiss = false;
 
         //listen for motion events on this object
@@ -133,7 +133,6 @@ public class PongGame extends JPanel implements MouseMotionListener {
         //if the pcPaddle is within 3 pixels of the detected collision point, stop moving
         if((Math.abs(pcPaddle.getCenterY() - detectedCollideY) < 3) && !pcGotToTarget){
             pcGotToTarget = true;
-            System.out.println("pc got to target");
         }
 
         if(!pcGotToTarget){
@@ -143,13 +142,15 @@ public class PongGame extends JPanel implements MouseMotionListener {
         else{
             //if the pc paddle is within 10 pixels of the detected collision point, oscillate up and down
             if(pcPaddle.getCenterY() > detectedCollideY + 10){
-                oscillationDirection = -5;
+                //once we reach a point 10 below collision point, start moving up towards 0
+                oscillateTowards = 0;
             }
             else if(pcPaddle.getCenterY() < detectedCollideY - 10){
-                oscillationDirection = 5;
+                //once we reach a point 10 above, start moving down towards WINDOW_HEIGHT
+                oscillateTowards = WINDOW_HEIGHT;
             }
-            //move the pc paddle up or down by calling moveTowards and the oscillationDirection based on the paddles current y position
-            pcPaddle.moveTowards(pcPaddle.getCenterY() + oscillationDirection);
+            //move the pc paddle up or down by having it moveTowards oscillateTowards
+            pcPaddle.moveTowards(oscillateTowards);
         }
 
         //move the paddle towards where the mouse is
